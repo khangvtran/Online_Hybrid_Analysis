@@ -1,9 +1,37 @@
 # lab 2: Analyze and plot scores
 # Name: Khang Vinh Tran, Mega Putra
 
+import openpyxl
+import csv
+import numpy as np
 
-def readExcel(  ) :
-    pass
+
+def readExcel(fileName) :
+    try:
+        listO = list()
+        listH = list()
+        wb = openpyxl.load_workbook(fileName)
+        sheet = wb.active
+        for row in sheet:
+            #print(row[0].value)
+            temp = list()
+            if (row[0].value == "H"):
+                for cell in row[1:] : temp.append(cell.value)
+                listH.append(temp)
+            elif (row[0].value == "O"):
+                for cell in row[1:] : temp.append(cell.value)
+                listO.append(temp)
+            print(temp)
+        return(tuple([listH, listO]))
+    except FileNotFoundError as e:
+        print(str(e))
+        
+fileName = "data1.xlsx"
+a = readExcel(fileName)
+print(a)
+
+
+
 
 def readCSV(fileName) :
     try:
@@ -13,14 +41,14 @@ def readCSV(fileName) :
             for row in inFile:
                 temp = row.split(',')
                 temp[-1] = temp[-1].replace("\n", "")
-                if temp[0] == "O" : listO.append(temp[1:])
-                elif temp[0] == "H" : listH.append(temp[1:])
+                if temp[0] == "O" : listO.append(list(map(float,temp[1:])))
+                elif temp[0] == "H" : listH.append(list(map(float,temp[1:])))
         return(tuple([listH, listO]))
     except FileNotFoundError as e:
         print(str(e))
  
-#a = readCSV("data2.csv")
-
+#b = readCSV("data2.csv")
+#print(b)
 
 def readFile(   ) :
     pass
@@ -35,33 +63,25 @@ def main() :
 
 #main()
 
-
 """
-fileName = 'data2.csv'
+fileName = "data1.xlsx"
 try:
-    with open(fileName, "r") as inFile:
-
+    listO = list()
+    listH = list()
+    wb = openpyxl.load_workbook(fileName)
+    sheet = wb.active
+    for row in sheet:
+        print(row[0].value)
+        temp = list()
+        if (row[0].value == "H"):
+            for cell in row[1:] : temp.append(cell.value)
+            listH.append(temp)
+        elif (row[0].value == "O"):
+            for cell in row[1:] : temp.append(cell.value)
+            listO.append(temp)
         
-        listO = list()
-        listH = list()
-        for row in inFile:
-            temp = row.split(',')
-            temp[-1] = temp[-1].replace("\n", "")
-            if temp[0] == "O" : listO.append(temp[1:])
-            elif temp[0] == "H" : listH.append(temp[1:])
-        
-        '''
-        listO = [row.split(',')[1:] for row in inFile if row.split(',')[0] == "O"]
-        inFile.seek(0)     # get back to head of file
-        listH = [row.split(',')[1:] for row in inFile if row.split(',')[0] == "H"]
-        '''
-        print(listH)
-        print(listO)
-        
-        #print(len(listO))
-        #print(len(listO[0]))
-
+        print(temp)
         
 except FileNotFoundError as e:
     print(str(e))
-"""
+"""    
