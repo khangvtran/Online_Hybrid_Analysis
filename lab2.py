@@ -13,7 +13,6 @@ def readExcel(fileName) :
         wb = openpyxl.load_workbook(fileName)
         sheet = wb.active
         for row in sheet:
-            #print(row[0].value)
             temp = list()
             if (row[0].value == "H"):
                 for cell in row[1:] : temp.append(cell.value)
@@ -21,15 +20,13 @@ def readExcel(fileName) :
             elif (row[0].value == "O"):
                 for cell in row[1:] : temp.append(cell.value)
                 listO.append(temp)
-            print(temp)
         return(tuple([listH, listO]))
     except FileNotFoundError as e:
         print(str(e))
         
 fileName = "data1.xlsx"
 a = readExcel(fileName)
-print(a)
-
+#print(a)
 
 
 
@@ -38,18 +35,18 @@ def readCSV(fileName) :
         listO = list()
         listH = list()        
         with open(fileName, "r") as inFile:
-            for row in inFile:
-                temp = row.split(',')
-                temp[-1] = temp[-1].replace("\n", "")
-                if temp[0] == "O" : listO.append(list(map(float,temp[1:])))
-                elif temp[0] == "H" : listH.append(list(map(float,temp[1:])))
-        return(tuple([listH, listO]))
+            reader = csv.reader(inFile)
+            for row in reader:
+                if (row[0] == "H") : listH.append(list(map(float, row[1:])))
+                elif (row[0] == "O") : listO.append(list(map(float, row[1:])))
+            return(tuple([listH, listO]))
     except FileNotFoundError as e:
         print(str(e))
  
-#b = readCSV("data2.csv")
+b = readCSV("data2.csv")
 #print(b)
 
+"""
 def readFile(   ) :
     pass
             
@@ -62,6 +59,8 @@ def main() :
     analyze(arrH, arrO)
 
 #main()
+"""
+
 
 """
 fileName = "data1.xlsx"
