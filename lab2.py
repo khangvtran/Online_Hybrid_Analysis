@@ -23,12 +23,7 @@ def readExcel(fileName) :
         return(tuple([listH, listO]))
     except FileNotFoundError as e:
         print(str(e))
-        
-#fileName = "data1.xlsx"
-#a = readExcel(fileName)
-#print(a)
-
-
+        raise SystemExit("System Exit: Unable to open xls file.")
 
 def readCSV(fileName) :
     try:
@@ -43,21 +38,18 @@ def readCSV(fileName) :
             return(tuple([listH, listO]))
     except FileNotFoundError as e:
         print(str(e))
- 
-#b = readCSV("data2.csv")
-#print(b)
+        raise SystemExit("System Exit: Unable to open csv file.")
+        
 
 def readFile(*args) :
     listH = list()
     listO = list()
     for fileName in args:
         if ".xlsx" in fileName:
-            print("XLSX")
             temp = readExcel(fileName)
             [listH.append(record) for record in temp[0]]
             [listO.append(record) for record in temp [1]]
         elif ".csv" in fileName:
-            print("CSV")
             temp = readCSV(fileName)
             [listH.append(record) for record in temp[0]]
             [listO.append(record) for record in temp [1]]
@@ -66,21 +58,42 @@ def readFile(*args) :
     arrO = np.array(listO)
     return(tuple([arrH, arrO]))
 
+
 (arrH, arrO)= readFile('data1.xlsx', 'data2.csv','data3.csv')
-print(arrH.shape)
-print(arrH)
-print(arrO.shape)
-print(arrO)
 
 
-def analyze(   ) :
-    pass
+totalPoints = 519
+sucessCountH = sum(100 * arrH.sum(1) / totalPoints >= 70)
+totalH = arrH.shape[0]
+sucessRateH = round(100 * sucessCountH/totalH, 2)
+sucessCountO = sum(100 * arrO.sum(1)/totalPoints >= 70)
+totalO = arrO.shape[0]
+sucessRateO = round(100 * sucessCountO/totalO, 2)
 
-'''
+
+
+
+def analyze(arrH, arrO):
+    print("*** Analysis for Hybrid v.s online class ***", "\n")
+    
+    # Measuring sucess Rate for O and H
+    totalPoints = 519
+    sucessCountH = sum(100 * arrH.sum(1) / totalPoints >= 70)
+    totalH = arrH.shape[0]
+    sucessRateH = round(100 * sucessCountH/totalH, 2)
+    
+    sucessCountO = sum(100 * arrO.sum(1)/totalPoints >= 70)
+    totalO = arrO.shape[0]
+    sucessRateO = round(100 * sucessCountO/totalO, 2) 
+    
+    print("- The sucess rate for hybrid classes is %.2f" %(sucessRateH))
+    print("- The sucess rate for online classes is %.2f" %(sucessRateO))
+    
+
+
 def main() :
     (arrH, arrO)= readFile('data1.xlsx', 'data2.csv','data3.csv')
     analyze(arrH, arrO)
 
-#main()
+main()
 
-'''
